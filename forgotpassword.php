@@ -14,16 +14,40 @@
     $data = mysqli_query($conn,$sql);
 
     if(mysqli_num_rows($data)>0) {
+
         $str =  "0123456789qwertyuiopasdfghjklzxcvbnm";
         $str = str_shuffle($str);
         $str = substr($str, 0, 10);
         $url = "http://localhost/oppomng/resetpassword.php?token=$str&email=$email";
 
+        require 'phpmailer/PHPMailerAutoload.php';
+        //mail($email, "RESET PASSWORD", "Click on the link to recover your password: $url", "From: test@localhost.com\r\n");
+        function sendmail($to, $from, $from_name, $subject, $message){
+            $mail = new PHPMailer();
 
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Port = 587;
+            $mail->SMTPSecure = 'tls';
+            $mail->SMTPDebug = false;
 
+            $mail->SMTPAuth = true;
+            $mail->Username = 'adrwer7@gmail.com';
+            $mail->Password = 'adrwer1377';
+           // $mail->Helo = getConfig('mail.yahoo.com');
+            $mail->setFrom($from, $from_name);
+            $mail->addAddress($to);
+
+            $mail->Subject = $subject;
+            $mail->Body = $message;
+
+            return $mail->send();
+
+        }
+
+        sendmail($email, "test@localhost.com", "Localhost", "RESET PASSWORD", "Click on the link to recover your password: $url");
         $sql = "UPDATE users SET token = '$str' WHERE email='$email'";
         mysqli_query($conn,$sql);
-      //  mail($email, "RESET PASSWORD", "Click on the link to recover your password: $url", "From: test@localhost.com\r\n");
         echo "Please check your email for the link";
     } else {
         echo "Please check your inputs!";
