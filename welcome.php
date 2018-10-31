@@ -2,20 +2,20 @@
         require("logincheck.php");
 
        if(isset($_POST["create"])) {
-        $conn = mysqli_connect("localhost", "root", "kijowife", "oppomng");
+        $conn = mysqli_connect("localhost", "root", "", "oppomng");
         if(!$conn) {
             die("Connection failed:" . mysqli_connect_error());
         }
         echo "connection successful <br>";
-        
-        
+
+
         $name = mysqli_real_escape_string($conn,$_POST['accntname']);
-        $phone = mysqli_real_escape_string($conn,$_POST['phone']);    
-        
+        $phone = mysqli_real_escape_string($conn,$_POST['phone']);
+
         $sql = "INSERT INTO accounts (Name, Phone) VALUES ('$name','$phone')";
-        
+
         $data = mysqli_query($conn,$sql);
-        
+
         if($data === false) {
             echo "Unsuccessful!";
         } else {
@@ -24,22 +24,22 @@
     }
 
     if(isset($_POST["create2"])) {
-        $conn = mysqli_connect("localhost", "root", "kijowife", "oppomng");
+        $conn = mysqli_connect("localhost", "root", "", "oppomng");
         if(!$conn) {
             die("Connection failed:" . mysqli_connect_error());
         }
         echo "connection successful <br>";
-        
-        
+
+
         $name = mysqli_real_escape_string($conn,$_POST['opname']);
-        $accnt = mysqli_real_escape_string($conn,$_POST['account']); 
-        $stage = mysqli_real_escape_string($conn,$_POST['stage']); 
-        $amnt = mysqli_real_escape_string($conn,$_POST['amount']); 
-        
+        $accnt = mysqli_real_escape_string($conn,$_POST['account']);
+        $stage = mysqli_real_escape_string($conn,$_POST['stage']);
+        $amnt = mysqli_real_escape_string($conn,$_POST['amount']);
+
         $sql = "INSERT INTO opportunities (Name, Account, Stage, Amount) VALUES ('$name','$accnt', '$stage', '$amnt')";
-        
+
         $data = mysqli_query($conn,$sql);
-        
+
         if($data === false) {
             echo "Unsuccessful!";
         } else {
@@ -48,20 +48,20 @@
     }
 
     if(isset($_POST["update"])) {
-        $conn=mysqli_connect("localhost", "root", "kijowife", "oppomng");
+        $conn=mysqli_connect("localhost", "root", "", "oppomng");
         if(!$conn) {
             die("Connection failed:" . mysqli_connect_error());
         }
         echo "connection successful <br>";
-        
-        
+
+
         $name = mysqli_real_escape_string($conn,$_POST['opname']);
-        $stage = mysqli_real_escape_string($conn,$_POST['stage']);  
-        
+        $stage = mysqli_real_escape_string($conn,$_POST['stage']);
+
         $sql = "UPDATE opportunities SET Stage = '$stage' WHERE Name = '$name'";
-        
+
         $data = mysqli_query($conn,$sql);
-        
+
         if($data === false) {
             echo "Unsuccessful!";
         } else {
@@ -83,12 +83,13 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    
+
 </head>
 <body>
     <p class="pull_right">Welcome <?php echo $_SESSION["username"] ?></p>
+    <p><a href="<?php session_destroy();?>">Log out</a></p>
     <br>
-<div class="table-responsive">   
+<div class="table-responsive">
 <table class="table table-bordered table-hover" border=1 >
         <tr>
             <td>ID</td>
@@ -97,21 +98,21 @@
             <td>Phone</td>
             <td>Stage</td>
             <td>Amount</td>
-            
+
         </tr>
-        <?php 
-            $conn=mysqli_connect("localhost", "root", "kijowife", "oppomng");
-    
+        <?php
+            $conn=mysqli_connect("localhost", "root", "", "oppomng");
+
             $sql = "SELECT accounts.id, opportunities.Account, opportunities.Name, accounts.Phone, opportunities.Stage, opportunities.Amount FROM accounts INNER JOIN opportunities  ON accounts.Name = opportunities.Account";
-    
+
             $data = mysqli_query($conn,$sql);
-        
+
             if(mysqli_num_rows($data)>0) {
                 while($row = mysqli_fetch_assoc($data)){
-                    echo "<tr>  
-                    <td>" . $row['id'] . "</td> 
+                    echo "<tr>
+                    <td>" . $row['id'] . "</td>
                     <td>" . $row['Account'] . "</td>
-                    <td>" . $row['Name'] . "</td>  
+                    <td>" . $row['Name'] . "</td>
                     <td>" . $row['Phone'] . "</td>
                     <td>" . $row['Stage'] . "</td>
                     <td>" . $row['Amount'] . "</td>
@@ -120,19 +121,19 @@
             } else {
                 echo "No results";
             }
-                
+
         ?>
-    </table> 
+    </table>
     </div>
     <br>
     <form method="post" action="welcome.php">
     <label>Name:</label><input type="text" name="accntname" placeholder="Account Name" required><br>
     <label>Phone Number:</label><input type="text" name="phone" placeholder="Phone Number" required><br>
-      
+
     <input type="submit" value="Create Account" name="create"><br>
 
-</form>    
-    
+</form>
+
     <br>
 <form method="post" action="welcome.php">
     <label>Name:</label><input type="text" name="opname" placeholder="Opportunity Name" required><br>
@@ -141,8 +142,8 @@
     <label>Amount:</label><input type="text" name="amount" placeholder="Amount" required><br>
     <input type="submit" value="Create Opportunity" name="create2"><br>
     <input type="submit" value="Update Opportunity Details" name="update"><br>
-    
-</form>     
+
+</form>
     <a href="view.php">View both tables</a>
 </body>
 </html>

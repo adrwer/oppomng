@@ -1,23 +1,23 @@
-<?php 
+<?php
     if(isset($_POST["register"])) {
         $conn = mysqli_connect("localhost", "root", "", "oppomng");
         if(!$conn) {
             die("Connection failed:" . mysqli_connect_error());
         }
         echo "connection successful <br>";
-        
-        
+
+
         $firstname = mysqli_real_escape_string($conn,$_POST['firstname']);
-        $lastname = mysqli_real_escape_string($conn,$_POST['lastname']);    
+        $lastname = mysqli_real_escape_string($conn,$_POST['lastname']);
         $user = mysqli_real_escape_string($conn,$_POST['username']);
         $pass = mysqli_real_escape_string($conn,$_POST['pass']);
-        
-        $sql = "INSERT INTO users (firstname, lastname, email, password) VALUES ('$firstname','$lastname', '$user', '$pass')";
-        
+
+        $sql = "INSERT INTO users (firstname, lastname, email, password, token) VALUES ('$firstname','$lastname', '$user', '$pass', ' ')";
+
         $data = mysqli_query($conn,$sql);
-        
+
         if($data === false) {
-            echo mysqli_error();
+            echo mysqli_error($conn);
         } else {
             echo "New record created succesfully";
         }
@@ -36,7 +36,7 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    
+
 </head>
 <body>
 <form class="center form-inline" method="post" action="register.php">
@@ -56,12 +56,12 @@
         <label for="password">Password:</label>
         <input class="form-control" type="password" name="pass" placeholder="Password" required>
     </div>
-     
+
     <button type="submit" class="btn btn-default" name="register">Register</button>
 
-</form>    
+</form>
 
     <a href="index.php" class="center">Already have an account</a>
-    
-</body>    
+
+</body>
 </html>
